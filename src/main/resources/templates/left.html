@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学生成绩管理系统</title>
+<!-- Bootstrap Styles-->
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+<style>
+body, td, th {
+	color: #000;
+}
+
+a:link {
+	color: #009;
+}
+
+a:visited {
+	color: #006;
+}
+</style>
+</head>
+<body>
+	<div th:fragment="left">
+		<div class="text-center">
+			<table class="table table-bordered">
+				<tr>
+					<td>学生信息管理：</td>
+				</tr>
+				<tr>
+					<td>&nbsp; <a id="xsInfo" th:href="@{/xsInfo}">学生信息查询</a></td>
+				</tr>
+				<tr>
+					<td>&nbsp; <a id="addXs" th:href="@{/addXs}">学生信息录入</a></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>课程信息管理：</td>
+				</tr>
+				<tr>
+					<td>&nbsp; <a id="kcInfo" th:href="@{/kcInfo}">课程信息查询</a></td>
+				</tr>
+				<tr>
+					<td>&nbsp; <a id="addKc" th:href="@{/addKc}">课程信息录入</a></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>成绩信息管理：</td>
+				</tr>
+				<tr>
+					<td>&nbsp; <a id="xscjInfo" th:href="@{/xscjInfo}">成绩信息查询</a></td>
+				</tr>
+				<tr>
+					<td>&nbsp; <a id="addXscj" th:href="@{/addXscj}">成绩信息录入</a></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp; <a id="logout" th:href="@{/logout}">退出登录</a></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<!-- jQuery Js -->
+	<script th:src="@{/jquery.min.js}"></script>
+	<!-- Bootstrap JS -->
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+</body>
+</html>

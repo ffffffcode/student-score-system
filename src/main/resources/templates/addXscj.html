@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学生成绩管理系统</title>
+<!-- Bootstrap Styles-->
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+
+</head>
+<body>
+
+	<div class="container">
+
+		<div class="row">
+				<div class="text-center">
+					<div class="page-header">
+						<h2>学生成绩管理系统</h2>
+					</div>
+				</div>
+		</div>
+
+
+		<div class="row">
+
+			<div class="col-md-2 col-md-offset-1">
+				<div th:include="left :: left"></div>
+			</div>
+
+
+			<div class="col-md-8">
+				<h3>请填写学生成绩</h3><br>
+				<form class="form-horizontal" action="/setCjAndXf">
+					<div class="form-group">
+						<label for="xs" class="col-md-2 control-label">姓名</label>
+						<div class="col-md-3">
+							<select class="form-control" id="xs" name="xh" required></select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="kc" class="col-md-2 control-label">课程</label>
+						<div class="col-md-4">
+							<select class="form-control" id="kc" name="kch" required><option></option></select>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="cj" class="col-md-2 control-label">成绩</label>
+						<div class="col-md-3">
+							<input type="text" class="form-control" id="cj" name="cj"
+								placeholder="请输入成绩" required>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-md-offset-2 col-md-4">
+							<button class="btn btn-default" id="save">保存</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<!-- jQuery Js -->
+	<script th:src="@{/jquery.min.js}"></script>
+	<!-- Bootstrap JS -->
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script>
+		$(document).ready(function() {
+							$.get("/listStudentName",
+									function(data, status) {
+										if (status == "success") {
+											$("#xs").append("<option value=></option>");
+											for (var i = 0; i < data.length; i++) {
+												var html = "<option value="+ data[i].xh +">"
+														+ data[i].xm
+														+ "</option>";
+												$("#xs").append(html);
+											}
+										}
+							});
+
+							$("#xs").change(
+									function getCourse() {
+										var xh = $("#xs").val();
+										// 获取学生的课程请求
+										$.ajax({
+											method : "GET",
+											url : "/listCourseByXh",
+											data : {xh : xh}
+										}).done(function(data) {
+													// 先把Select清空  
+													$("#kc").empty();
+													if ($.isEmptyObject(data)) {
+													$("#kc").append("<option value=>无</option>");
+													} else {
+														for (var i = 0; i < data.length; i++) {
+															var html = "<option value="+ data[i].kch +">"
+																							+ data[i].kcm
+																							+ "</option>";
+															$("#kc").append(html);
+														}
+													}
+										});
+
+							});
+
+/* 							$("#save").click(function() {
+								// 取学号
+								var xh = $("#xs").val();
+								// 取课程号
+								var kch = $("#kc").val();
+								// 取成绩
+								var cj = $("#cj").val();
+
+								if (xh == null || xh == "") {
+									alert("请选择学生");
+								} else if (kch == null || kch == "") {
+									alert("请选择课程");
+								} else if (cj == null || cj == "") {
+									alert("请输入成绩");
+								} else {
+									$.post("/setCjAndXf", {
+										xh : xh,
+										kch : kch,
+										cj : cj
+									}, function(data, status) {
+										if (status == "success") {
+										}
+									});
+								}
+							}); */
+						});
+	</script>
+</body>
+</html>

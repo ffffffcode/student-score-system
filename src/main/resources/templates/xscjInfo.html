@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学生成绩管理系统</title>
+<!-- Bootstrap Styles-->
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+
+</head>
+<body>
+
+	<div class="container">
+
+		<div class="row">
+				<div class="text-center">
+					<div class="page-header">
+						<h2>学生成绩管理系统</h2>
+					</div>
+				</div>
+		</div>
+
+
+		<div class="row">
+
+			<div class="col-md-2 col-md-offset-1">
+				<div th:include="left :: left"></div>
+			</div>
+
+
+			<div class="col-md-8">
+				<h3>查询学生成绩</h3>
+				<div class="row">
+					<div class="col-md-offset-10 col-md-2">
+						<input class="form-control input-sm" type="text" id="pageSize"
+							placeholder="每页显示几条"> <input type="hidden" id="pageNum">
+					</div>
+				</div>
+				<table class="table table-bordered">
+					<thead>
+						<tr>
+							<th>学号</th>
+							<th>姓名</th>
+							<th>课程名</th>
+							<th>成绩</th>
+							<th>学分</th>
+							<th>删除</th>
+						</tr>
+					</thead>
+					<tbody id="info">
+
+					</tbody>
+				</table>
+				<p id="pageInfo"></p>
+
+				<div class="row">
+					<div class="col-md-12">
+						<div class="text-center">
+							<nav aria-label="Page navigation">
+								<ul class="pagination" id="nav">
+
+								</ul>
+							</nav>
+						</div>
+					</div>
+				</div>
+
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<!-- jQuery Js -->
+	<script th:src="@{/jquery.min.js}"></script>
+	<!-- Bootstrap JS -->
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script>
+		function getInfo() {
+			// 取页数
+			var pageNum = $("#pageNum").val();
+			// 取每页的数量
+			var pageSize = $("#pageSize").val();
+			// 拼接url
+			var url = "/listScoreWithPagingAndNav?pageNum=" + pageNum + "&pageSize=" + pageSize;
+			// 提交请求
+			$.get(url, function(data, status) {
+				if (status == "success") {
+					// 先清空内容
+					$("#pageInfo").empty();
+					// 添加页面信息，用<p>显示
+					$("#pageInfo").html("当前第" + data.pageNum + "页.共" + data.pages + "页." + data.total + "条记录");
+					
+					// 先清空内容
+					$("#nav").empty();
+					// 添加首页导航
+					$("#nav").append("<li><a href=javascript:void(0) aria-label=Previous onclick=changePageNum(" + data.navigateFirstPage +")> " + "<span aria-hidden=true>&laquo;</span>" + "</a></li>");
+					// 按后台取到的总页数，循环添加导航
+					for (var i = 1; i <= data.pages; i++) {
+						$("#nav").append("<li><a href=javascript:void(0) onclick=changePageNum($(this).html())>" + i + "</a></li>");
+					}
+					// 添加尾页导航
+					$("#nav").append("<li><a href=javascript:void(0) aria-label=Next onclick=changePageNum(" + data.navigateLastPage +")> " + "<span aria-hidden=true>&raquo;</span>" + "</a></li>");
+					
+					// 先清空表体
+					$("#info").empty();	
+					for (var i = 0; i < data.list.length; i++) {
+						var cj;
+						if(typeof(data.list[i].cj) == "undefined" || data.list[i].cj == 0){
+							cj = "未录入";
+						} else {
+							cj = data.list[i].cj;
+						}
+						var xf;
+						if(typeof(data.list[i].xf) == "undefined"){
+							xf = 0;
+						} else {
+							xf = data.list[i].xf;
+						}
+						var html = "<tr><td>" + data.list[i].xh + "</td><td>"
+								+ data.list[i].xm + "</td><td>" + data.list[i].kcm
+								+ "</td><td>" + cj + "</td><td>"
+								+ xf + "</td><td><a href=/setCjAndXfToZero?xh=" + data.list[i].xh + "&kch=" + data.list[i].kch + ">删除成绩</a></td></tr>";
+						$("#info").append(html);
+					}
+				}
+			});
+		}
+
+		// 取点击的a标签的值，给到隐藏域input的pageNum，然后请求数据
+		function changePageNum(a) {
+			$("#pageNum").val(a);
+			getInfo();
+		}
+
+		$(document).ready(function() {
+			getInfo();
+			$("#pageSize").on("input", function() {
+				// 更新后重定向到第一页，然后请求数据
+				$("#pageNum").val(1);
+				getInfo();
+			});
+		});
+	</script>
+</body>
+</html>

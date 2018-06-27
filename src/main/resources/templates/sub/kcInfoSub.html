@@ -1,0 +1,35 @@
+<h3>查询课程信息</h3>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>课程号</th>
+			<th>课程名</th>
+			<th>开课学期</th>
+			<th>学时</th>
+			<th>学分</th>
+			<th>操作</th>
+			<th>操作</th>
+		</tr>
+	</thead>
+	<tbody id="info">
+
+	</tbody>
+</table>
+<script>
+	$(document).ready(
+			function() {
+				$.get("/listCourse", function(data, status) {
+					if (status == "success") {
+						for (var i = 0; i < data.length; i++) {
+							var html = "<tr><td>" + data[i].kch + "</td><td>"
+									+ data[i].kcm + "</td><td>" + data[i].kxxq
+									+ "</td><td>" + data[i].xs + "</td><td>"
+									+ data[i].xf
+									+ "</td><td><a href=/toUpdate?kch="+ data[i].kch +">更新</a></td><td><a href=/deleteCoureseByKch?kch="+ data[i].kch +">删除</a></td></tr>";
+							$("#info").append(html);
+						}
+					}
+				});
+
+			});
+</script>

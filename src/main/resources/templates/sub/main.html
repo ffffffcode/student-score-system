@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学生成绩管理系统</title>
+<!-- Bootstrap Styles-->
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+</head>
+<body style="background-color: #D9DFAA">
+
+	<div class="container">
+
+		<div class="row" style="margin-bottom: 15px">
+			<div class="col-sm-12">
+				<div class="text-center">
+					<img src="images/head.gif" />
+				</div>
+			</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-sm-2 col-sm-offset-1">
+				<div th:include="leftSub :: left"></div>
+			</div>
+			<div class="col-sm-8">
+				<div id="right"></div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- jQuery Js -->
+	<script th:src="@{/jquery.min.js}"></script>
+	<!-- Bootstrap JS -->
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script>
+		$(document).ready(function() {
+			$("#xsInfo").click(function() {
+				$.get("/xsInfoSub", function(data, status) {
+					if (status == "success") {
+						$("#right").html(data);
+					}
+				});
+			});
+			$("#addXs").click(function() {
+				$.get("/addXsSub", function(data, status) {
+					if (status == "success") {
+						$("#right").html(data);
+					}
+				});
+			});
+			$("#kcInfo").click(function() {
+				$.get("/kcInfoSub", function(data, status) {
+					if (status == "success") {
+						$("#right").html(data);
+					}
+				});
+			});
+			$("#addKc").click(function() {
+				$.get("/addKcSub", function(data, status) {
+					if (status == "success") {
+						$("#right").html(data);
+					}
+				});
+			});
+			$("#xscjInfo").click(function() {
+				$.get("/xscjInfoSub", function(data, status) {
+					if (status == "success") {
+						$("#right").html(data);
+					}
+				});
+			});
+			$("#addXscj").click(function() {
+				$.get("/addXscjSub", function(data, status) {
+					if (status == "success") {
+						$("#right").html(data);
+					}
+				});
+			});
+		});
+	</script>
+</body>
+</html>

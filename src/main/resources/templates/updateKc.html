@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学生成绩管理系统</title>
+<!-- Bootstrap Styles-->
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+</head>
+<body>
+
+	<div class="container">
+
+		<div class="row">
+				<div class="text-center">
+					<div class="page-header">
+						<h2>学生成绩管理系统</h2>
+					</div>
+				</div>
+		</div>
+
+
+		<div class="row">
+			<div class="col-md-2 col-md-offset-1">
+				<div th:include="left :: left"></div>
+			</div>
+			<div class="col-md-8">
+				<div id="right">
+					<h3>更新课程信息</h3>
+					<br>
+					<form class="form-horizontal" action="/updataeCoureseByKch" method="post">
+						<div class="form-group">
+							<label for="kch" class="col-md-2 control-label">课程号</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" id="kch" name="kch"
+									placeholder="课程号" readonly>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="kcm" class="col-md-2 control-label">课程名</label>
+							<div class="col-md-4">
+								<input type="text" class="form-control" id="kcm" name="kcm"
+									placeholder="课程名" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="kxxq" class="col-md-2 control-label">开学学期</label>
+							<div class="col-md-3">
+								<select class="form-control" id="kxxq" name="kxxq" required>
+									<option value="1">大一：上学期</option>
+									<option value="2">大一：下学期</option>
+									<option value="3">大二：上学期</option>
+									<option value="4">大二：下学期</option>
+									<option value="5">大三：上学期</option>
+									<option value="6">大三：下学期</option>
+									<option value="7">大四：上学期</option>
+									<option value="8">大四：下学期</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="xs" class="col-md-2 control-label">学时</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" id="xs" name="xs"
+									placeholder="学时" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="xf" class="col-md-2 control-label">学分</label>
+							<div class="col-md-3">
+								<input type="text" class="form-control" id="xf" name="xf"
+									placeholder="学分" required>
+							</div>
+						</div>
+						<div class="form-group">
+							<div class="col-md-offset-2 col-md-4">
+								<button class="btn btn-default" id="save">保存</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- jQuery Js -->
+	<script th:src="@{/jquery.min.js}"></script>
+	<!-- Bootstrap JS -->
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script>
+		$(document).ready(function() {
+
+			// 获取当前URL
+			var href = window.location.href;
+			// 获取kch参数位置
+			var num = href.indexOf("kch=");
+			// 获取kch
+			var kch = href.substr(num + 4);
+			// 如果参数获取失败则重定向到课程信息页面 
+			if (num == -1) {
+				alert("非法访问！");
+				window.location = '/kcInfo';
+			}
+			var url = "/getKcByKch?kch=" + kch;
+			$.get(url, function(data, status) {
+				if (status == "success") {
+					$("#kch").val(data.kch);
+					$("#kcm").val(data.kcm);
+					$("#kxxq").val(data.kxxq);
+					$("#xf").val(data.xf);
+					$("#xs").val(data.xs);
+				}
+			});
+		});
+	</script>
+</body>
+</html>

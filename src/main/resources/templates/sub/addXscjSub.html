@@ -1,0 +1,112 @@
+<h3>请填写学生成绩信息</h3>
+<form class="form-horizontal">
+	<div class="form-group">
+		<label for="xs" class="col-sm-2 control-label">姓名</label>
+		<div class="col-sm-4">
+			<select class="form-control" id="xs"></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="kc" class="col-sm-2 control-label">课程</label>
+		<div class="col-sm-4">
+			<select class="form-control" id="kc"><option></option></select>
+		</div>
+	</div>
+	<div class="form-group">
+		<label for="cj" class="col-sm-2 control-label">成绩</label>
+		<div class="col-sm-3">
+			<input type="text" class="form-control" id="cj" placeholder="请输入成绩">
+		</div>
+	</div>
+</form>
+<div class="col-sm-offset-2 col-sm-4">
+	<button class="btn btn-default" id="save">保存</button>
+</div>
+<script>
+	$(document)
+			.ready(
+					function() {
+
+						$
+								.get(
+										"/listStudentName",
+										function(data, status) {
+											if (status == "success") {
+												$("#xs")
+														.append(
+																"<option value=></option>");
+												for (var i = 0; i < data.length; i++) {
+													var html = "<option value="+ data[i].xh +">"
+															+ data[i].xm
+															+ "</option>";
+													$("#xs").append(html);
+												}
+											}
+										});
+
+						$("#xs")
+								.change(
+										function getCourse() {
+											var xh = $("#xs").val();
+											// 获取学生的课程请求
+											$
+													.ajax(
+															{
+																method : "GET",
+																url : "/listCourseByXh",
+																data : {
+																	xh : xh
+																}
+															})
+													.done(
+															function(data) {
+																// 先把Select清空  
+																$("#kc")
+																		.empty();
+																if ($
+																		.isEmptyObject(data)) {
+																	$("#kc")
+																			.append(
+																					"<option value=>无</option>");
+																} else {
+																	for (var i = 0; i < data.length; i++) {
+																		var html = "<option value="+ data[i].kch +">"
+																				+ data[i].kcm
+																				+ "</option>";
+																		$("#kc")
+																				.append(
+																						html);
+																	}
+																}
+															});
+
+										});
+
+						$("#save").click(function() {
+							// 取学号
+							var xh = $("#xs").val();
+							// 取课程号
+							var kch = $("#kc").val();
+							// 取成绩
+							var cj = $("#cj").val();
+
+							if (xh == null || xh == "") {
+								alert("请选择学生");
+							} else if (kch == null || kch == "") {
+								alert("请选择课程");
+							} else if (cj == null || cj == "") {
+								alert("请输入成绩");
+							} else {
+								$.post("/saveScore", {
+									xh : xh,
+									kch : kch,
+									cj : cj
+								}, function(data, status) {
+									if (status == "success") {
+									}
+								});
+							}
+						});
+
+					});
+</script>

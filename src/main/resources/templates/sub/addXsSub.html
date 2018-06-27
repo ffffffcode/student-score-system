@@ -1,0 +1,48 @@
+<h3>录入学生信息</h3>
+<form action="/saveStudent" method="post">
+	<div class="form-group">
+		<label for="xh">学号</label> <input type="text" class="form-control"
+			id="xh" name="xh" placeholder="学号">
+	</div>
+	<div class="form-group">
+		<label for="xm">姓名</label> <input type="text" class="form-control"
+			id="xm" name="xm" placeholder="姓名">
+	</div>
+	<div class="form-group">
+		<label for="zyId">专业</label> <select class="form-control" id="zyId"
+			name="zyId">
+			<option value=""></option>
+		</select>
+	</div>
+	<div class="radio">
+		<label class="radio"> <input type="radio" name="xb" value="0">
+			女
+		</label>
+	</div>
+	<div class="radio">
+		<label class="radio"> <input type="radio" name="xb" value="1">
+			男
+		</label>
+	</div>
+	<div class="form-group">
+		<label for="exampleInputFile">File input</label> <input type="file"
+			id="exampleInputFile">
+		<p class="help-block">Example block-level help text here.</p>
+	</div>
+	<textarea class="form-control" name="bz" rows="3"></textarea>
+	<button type="submit" class="btn btn-default">保存</button>
+</form>
+<script>
+	$(document).ready(
+			function() {
+				$.get("/listMajorIdAndZym", function(data, status) {
+					if (status == "success") {
+						for (var i = 0; i < data.length; i++) {
+							var html = "<option value="+ data[i].id +">"
+									+ data[i].zym + "</option>";
+							$("#zyId").append(html);
+						}
+					}
+				});
+			});
+</script>

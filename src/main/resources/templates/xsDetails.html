@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>学生成绩管理系统</title>
+<!-- Bootstrap Styles-->
+<link rel="stylesheet" th:href="@{/bootstrap/css/bootstrap.min.css}">
+
+</head>
+<body>
+
+	<div class="container">
+
+		<div class="row">
+				<div class="text-center">
+					<div class="page-header">
+						<h2>学生成绩管理系统</h2>
+					</div>
+				</div>
+		</div>
+
+
+		<div class="row">
+
+			<div class="col-md-2 col-md-offset-1">
+				<div th:include="left :: left"></div>
+			</div>
+
+
+			<div class="col-md-8">
+				<h3>学生详细信息</h3>
+				<table border="1" width="80%">
+					<tr>
+						<td></td><td></td>
+						<td colspan="2" rowspan="7">
+							<img id="zp" alt="学生照片">
+							<form action="/updateZpByXh" method="post"
+								enctype="multipart/form-data">
+								<input type="hidden" id="form-xh" name="xh">
+								<input type="file" name="zp">
+								<input type="submit" value="更新照片">
+							</form>
+						</td>
+					</tr>
+					<tr height="40">
+						<th id="xh" width="30%">学号</th>
+					</tr>
+					<tr height="40">
+						<th id="xm">姓名</th>
+					</tr>
+					<tr height="40">
+						<th id="xb">性别</th>
+					</tr>
+					<tr height="40">
+						<th id="cssj">出生时间</th>
+					</tr>
+					<tr height="40">
+						<th id="zym">专业名称</th>
+					</tr>
+					<tr height="40">
+						<th id="zxf">总学分</th>
+					</tr>
+					<tr height="80">
+						<th id="bz" colspan="2">备注</th>
+					</tr>
+				</table>
+			</div>
+
+		</div>
+
+	</div>
+
+
+	<!-- jQuery Js -->
+	<script th:src="@{/jquery.min.js}"></script>
+	<!-- Bootstrap JS -->
+	<script th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
+	<script>
+		$(document).ready(
+			function() {
+				// 获取当前URL
+				var href = window.location.href;
+				// 获取kch参数位置
+				var num = href.indexOf("xh=");
+				// 获取kch
+				var xh = href.substr(num + 3);
+				// 如果参数获取失败则重定向到课程信息页面 
+				if (num == -1) {
+					alert("非法访问！");
+					window.location = '/xsInfo';
+				}
+				var url = "/getStudentByXh?xh=" + xh;
+				// 设置学号
+				$("#xh").after("<td>" + xh + "</td>");
+				$("#form-xh").val(xh);
+				// 设置图片
+				$("#zp").attr("src","/getZpByXh?xh="+xh);
+				$.get(url, function(data, status) {
+					if (status == "success") {
+						var gender = "男";
+						if (data.xb == false) {
+							gender = "女";
+						}
+						// 设置名字
+						$("#xm").after("<td>" + data.xm + "</td>");
+						$("#xb").after("<td>" + gender + "</td>");
+						$("#zym").after("<td>" + data.zym + "</td>");
+						$("#cssj").after("<td>" + data.cssj + "</td>");
+						$("#zxf").after("<td>" + data.zxf + "</td>");
+						$("#bz").after("<td>" + data.bz + "</td>");
+					}
+				});
+			});
+	</script>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<h3>查询学生成绩</h3>
+<table class="table table-bordered">
+	<thead>
+		<tr>
+			<th>学号</th>
+			<th>姓名</th>
+			<th>课程名</th>
+			<th>成绩</th>
+			<th>学分</th>
+			<th>删除</th>
+		</tr>
+	</thead>
+	<tbody id="info">
+
+	</tbody>
+</table>
+<script>
+	$(document).ready(
+			function() {
+				$.get("/listScore", function(data, status) {
+					if (status == "success") {
+						for (var i = 0; i < data.length; i++) {
+							var html = "<tr><td>" + data[i].xh + "</td><td>"
+									+ data[i].xm + "</td><td>" + data[i].kcm
+									+ "</td><td>" + data[i].cj + "</td><td>"
+									+ data[i].xf + "</td><td></td></tr>";
+							$("#info").append(html);
+						}
+					}
+				});
+
+			});
+</script>

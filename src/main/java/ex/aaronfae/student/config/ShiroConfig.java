@@ -39,18 +39,20 @@ public class ShiroConfig {
 		shiroFilterFactoryBean.setSecurityManager(securityManager);
 
 		shiroFilterFactoryBean.setLoginUrl("/login");
-		shiroFilterFactoryBean.setSuccessUrl("/");
+		shiroFilterFactoryBean.setSuccessUrl("/index");
 		// 未授权界面;
 		shiroFilterFactoryBean.setUnauthorizedUrl("/403");
 
 		Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
 
 		filterChainDefinitionMap.put("/static/**", "anon");
+		filterChainDefinitionMap.put("/templates/**", "anon");
 		filterChainDefinitionMap.put("/bootstrap/**", "anon");
 		filterChainDefinitionMap.put("/datetimepicker/**", "anon");
 		filterChainDefinitionMap.put("/jquery.min.js", "anon");
 		filterChainDefinitionMap.put("/favicon.ico", "anon");
-		filterChainDefinitionMap.put("/ajaxLogin/**", "anon");
+		filterChainDefinitionMap.put("/ajaxLogin", "anon");
+		filterChainDefinitionMap.put("/login", "anon");
 		filterChainDefinitionMap.put("/logout", "logout");
 		filterChainDefinitionMap.put("/**", "authc");
 		shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
